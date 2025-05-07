@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use FilamentTiptapEditor\TiptapEditor;
+use FilamentTiptapEditor\Enums\TiptapOutput;
 
 class RevisionSheetResource extends Resource
 {
@@ -40,10 +42,6 @@ class RevisionSheetResource extends Resource
                     ->label('Chapitre')
                     ->maxLength(255),
 
-                Forms\Components\Textarea::make('contenuHtml')
-                    ->label('Contenu HTML')
-                    ->rows(10),
-
                 Forms\Components\TagsInput::make('tags')
                     ->label('Tags'),
 
@@ -67,7 +65,13 @@ class RevisionSheetResource extends Resource
 
                 Forms\Components\Toggle::make('favorite')
                     ->label('Favori'),
-            ]);
+                
+                TiptapEditor::make('content')
+                    ->profile('default')
+                    ->output(TiptapOutput::Html)
+                    ->extraAttributes(['style' => 'min-height: 300px;'])
+                    ->required(),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
