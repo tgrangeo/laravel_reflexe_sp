@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RevisionSheetResource\Pages;
 use App\Models\RevisionSheet;
+use App\Helpers\FontAwesomeIcons;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Forms\Form;
@@ -23,50 +24,34 @@ class RevisionSheetResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('type')
-                    ->label('Type')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('icon')
+                    ->label('Icône')
+                    ->options(FontAwesomeIcons::list)
+                    ->searchable()
+                    ->reactive(),
 
-                Forms\Components\TextInput::make('categorie')
-                    ->label('Catégorie')
-                    ->required()
-                    ->maxLength(255),
-
-                Forms\Components\TextInput::make('titre')
+                Forms\Components\TextInput::make('title')
                     ->label('Titre')
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('chapitre')
-                    ->label('Chapitre')
+                Forms\Components\TextInput::make('course')
+                    ->label('Parcours')
+                    ->required()
                     ->maxLength(255),
 
-                Forms\Components\TagsInput::make('tags')
-                    ->label('Tags'),
+                Forms\Components\TextInput::make('category')
+                    ->label('Catégorie')
+                    ->required()
+                    ->maxLength(255),
 
-                Forms\Components\Select::make('criticite')
-                    ->label('Criticité')
-                    ->options([
-                        'faible' => 'Faible',
-                        'moyenne' => 'Moyenne',
-                        'elevee' => 'Élevée',
-                    ])
-                    ->nullable(),
+                Forms\Components\TextInput::make('author')
+                    ->label('Auteur')
+                    ->required()
+                    ->maxLength(255),
 
-                Forms\Components\Select::make('frequenceUtilisation')
-                    ->label('Fréquence d\'utilisation')
-                    ->options([
-                        'rare' => 'Rare',
-                        'occasionnelle' => 'Occasionnelle',
-                        'frequente' => 'Fréquente',
-                    ])
-                    ->nullable(),
-
-                Forms\Components\Toggle::make('favorite')
-                    ->label('Favori'),
-                
                 TiptapEditor::make('content')
+                    ->label('Contenu')
                     ->profile('default')
                     ->output(TiptapOutput::Html)
                     ->extraAttributes(['style' => 'min-height: 300px;'])
@@ -78,10 +63,10 @@ class RevisionSheetResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('titre'),
-                Tables\Columns\TextColumn::make('categorie'),
-                Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('chapitre'),
+                Tables\Columns\TextColumn::make('title')->label('Titre')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('category')->label('Catégorie')->sortable(),
+                Tables\Columns\TextColumn::make('course')->label('Parcours')->sortable(),
+                Tables\Columns\TextColumn::make('author')->label('Auteur')->sortable(),
             ])
             ->filters([
                 //
@@ -98,9 +83,7 @@ class RevisionSheetResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
